@@ -1,0 +1,24 @@
+{
+  "name": "sabu",
+  "version": "1.0.0",
+  "description": "Static file server in Node.js",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesleybliss/sabu.git"
+  },
+  "keywords": [
+    "node",
+    "static",
+    "server"
+  ],
+  "author": "Wesley Bliss <wesley.bliss@gmail.com> (https://wesleybliss.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wesleybliss/sabu/issues"
+  },
+  "homepage": "https://github.com/wesleybliss/sabu#readme"
+}
