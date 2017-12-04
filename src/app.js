@@ -12,7 +12,7 @@ const app = restify.createServer({
     version: '1.0.0'
 })
 
-const cors = corsMiddleware({
+const defaultCorsConfig = {
     preflightMaxAge: 5, // Optional
     origins: ['*'],
     allowHeaders: [
@@ -22,7 +22,9 @@ const cors = corsMiddleware({
         'Access-Control-Allow-Headers'
     ],
     exposeHeaders: ['API-Token-Expiry']
-})
+}
+
+const cors = corsMiddleware(defaultCorsConfig)
 
 app.use(restify.plugins.acceptParser(app.acceptable))
 app.use(restify.plugins.fullResponse())
@@ -122,9 +124,4 @@ app.get(/\/.*/, (req, res) => {
     
 })
 
-
-const host = process.env.HOST || '0.0.0.0'
-const port = process.env.PORT || 8080
-
-app.listen(port, host, console.info(
-    `Client server listening at http://${host}:${port}`))
+module.exports = app

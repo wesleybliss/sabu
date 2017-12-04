@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/wesleybliss/sabu/issues"
   },
-  "homepage": "https://github.com/wesleybliss/sabu#readme"
+  "homepage": "https://github.com/wesleybliss/sabu#readme",
+  "dependencies": {
+    "commander": "^2.12.2",
+    "mime-types": "^2.1.17",
+    "restify": "^6.3.4",
+    "restify-cors-middleware": "^1.0.1"
+  }
 }
