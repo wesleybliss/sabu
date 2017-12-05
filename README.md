@@ -138,3 +138,13 @@ $ sabu ./build
 1. An `init` command to generate a default config file
 2. More intentional parsing of CORS config (currently just uses `Object.assign`, overwriting any default configs)
 3. A `watch` option to monitor for file changes
+
+
+<br><br>
+
+
+> Buy Me a scotch?
+
+**Bitcoin:** `17sVT44EBTmnVdpikDizran89neP8RXdB8`
+
+**Ethereum:** `0x4f393adc830f2f480011f7507ABdf784455D1796`
