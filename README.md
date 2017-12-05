@@ -59,7 +59,7 @@ Options:
   -h, --host <s>    Host (default: "0.0.0.0"
   -p, --port <n>    Port (default: 8080)
   -q, --quiet       Quiet startup (no console output)
-  -a, --auth        Basic auth (user:pass)
+  -a, --auth <s>    Basic auth (user:pass)
   -c, --config <s>  JSON config file with options
   -h, --help        output usage information
 ```

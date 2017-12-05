@@ -22,7 +22,7 @@ program
     .option('-h, --host <s>', 'Host (default: "0.0.0.0"')
     .option('-p, --port <n>', 'Port (default: 8080)', parseInt)
     .option('-q, --quiet', 'Quiet startup (no console output)')
-    .option('-a, --auth', 'Basic auth (user:pass)')
+    .option('-a, --auth <s>', 'Basic auth (user:pass)')
     .option('-c, --config <s>', 'JSON config file with options')
     .action(target => { source = target })
 
