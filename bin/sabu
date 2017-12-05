@@ -22,6 +22,7 @@ program
     .option('-h, --host <s>', 'Host (default: "0.0.0.0"')
     .option('-p, --port <n>', 'Port (default: 8080)', parseInt)
     .option('-q, --quiet', 'Quiet startup (no console output)')
+    .option('-a, --auth', 'Basic auth (user:pass)')
     .option('-c, --config <s>', 'JSON config file with options')
     .action(target => { source = target })
 
@@ -65,6 +66,32 @@ const connect = (host, port, source) => {
         if (!program.quiet) process.stdout.write(tag)
         
     })
+}
+
+const parseAuth = auth => {
+    
+    if (!auth.includes(':'))
+        throw new Error('--auth must be in the format of user:pass')
+    
+    let index = auth.lastIndexOf(':')
+    let user = auth.substring(0, index)
+    let pass = auth.substring(index + 1)
+    
+    const isQuoted = (arg, char) => arg.startsWith(char) && arg.endsWith(char)
+    
+    if (isQuoted(user, '"') && isQuoted(pass, '"')) {
+        user = user.substring(1, user.length - 1)
+        pass = pass.substring(1, pass.length - 1)
+    }
+    else if (isQuoted(user, "'") && isQuoted(pass, "'")) {
+        user = user.substring(1, user.length - 1)
+        pass = pass.substring(1, pass.length - 1)
+    }
+    
+    // console.log(`${auth} ... ${user}/${pass}`)
+    
+    return { user, pass }
+    
 }
 
 const start = opts => {
@@ -126,6 +153,7 @@ else {
     
     if (program.host) opts.host = program.host
     if (program.port) opts.port = program.port
+    if (program.auth) opts.basicAuth = parseAuth(program.auth)
     
 }
 

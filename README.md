@@ -2,6 +2,7 @@
 
 `Sabu` is a simple CLI HTTP server.
 
+
 ## Motivation
 
 For most simple tasks, there are plenty of static
@@ -13,6 +14,7 @@ Vue and React. Others require workarounds for CORS issues.
 
 Sabu aims to be minimal and flexible. _As such, it is not (yet)
 recommended for production use._
+
 
 ## Installation
 
@@ -29,6 +31,7 @@ $ cd path/to/your-project
 $ npm i --save-dev sabu
 ```
 
+
 ## Usage
 
 From a CLI, you can simply run Sabu to start serving files. By default,
@@ -40,6 +43,7 @@ $ sabu
 
 By default, Saby serves on host `0.0.0.0` and port `8080`, automatically
 incrementing the port if it's already in use.
+
 
 ## Options
 
@@ -55,9 +59,26 @@ Options:
   -h, --host <s>    Host (default: "0.0.0.0"
   -p, --port <n>    Port (default: 8080)
   -q, --quiet       Quiet startup (no console output)
+  -a, --auth        Basic auth (user:pass)
   -c, --config <s>  JSON config file with options
   -h, --help        output usage information
 ```
+
+The parameter `--auth` for basic HTTP authorization is in the format
+of `username:password`. If one value is quoted, they both should
+be. If multiple colons are found, the password is assumed to be after
+the last instance. Some examples of how auth is parsed:
+
+| CLI Input       | Parsed Username   | Parsed Password |
+| --------------- | ----------------- | --------------- |
+| `user:pass`     | `user`            | `pass`          |
+| `user:foo:pass` | `user:foo`        | `pass`          |
+| `"user":"pass"` | `user`            | `pass`          |
+| `"user":pass`   | `"user"`          | `pass`          |
+| `user:"pass"`   | `user`            | `"pass"`        |
+
+
+## Config File
 
 Sabu can also accept a JSON config file. Any filename is acceptable.
 
@@ -67,6 +88,10 @@ Sabu can also accept a JSON config file. Any filename is acceptable.
     "source": ".",
     "host": "localhost",
     "port": 8084,
+    "basicAuth": {
+		"user": "myuser",
+		"pass": "mypass"
+    },
     "cors": {
         "preflightMaxAge": 5,
         "origins": ["*"],
@@ -80,6 +105,7 @@ Sabu can also accept a JSON config file. Any filename is acceptable.
     }
 }
 ```
+
 
 ## Common Usage
 
