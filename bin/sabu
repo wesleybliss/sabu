@@ -129,6 +129,6 @@ else {
     
 }
 
-const app = require('./app')(opts)
+const app = require('./src/app')(opts)
 
 start(opts)

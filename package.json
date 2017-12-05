@@ -2,9 +2,9 @@
   "name": "sabu",
   "version": "1.0.1",
   "description": "Static file server in Node.js",
-  "main": "src/index.js",
+  "main": "bin/sabu",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "node ./bin/sabu",
     "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
