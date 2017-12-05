@@ -3,7 +3,6 @@
 const fs = require('fs')
 const path = require('path')
 const program = require('commander')
-const app = require('./app')
 
 process.title = 'sabu'
 
@@ -20,23 +19,49 @@ program
     .arguments('[path]')
     .option('-h, --host <s>', 'Host (default: "0.0.0.0"')
     .option('-p, --port <n>', 'Port (default: 8080)', parseInt)
+    .option('-q, --quiet', 'Quiet startup (no console output)')
     .option('-c, --config <s>', 'JSON config file with options')
     .action(target => { source = target })
 
 program.parse(process.argv)
 
+const createTag = (a, b) => {
+    let tag = fs.readFileSync(path.resolve(__dirname, 'sabu.tag'), 'utf8')
+    tag = tag.replace('%1', a)
+    tag = tag.replace('%2', b)
+    return tag
+}
+
+const clearLines = n => {
+    
+    process.stdout.moveCursor(0)
+    process.stdout.clearLine()
+    
+    for (let i = n; i > 0; i--) {
+        process.stdout.moveCursor(0, -1)
+        process.stdout.clearLine()
+    }
+    
+}
+
 const connect = (host, port, source) => {
+    
     app.listen(port, host, () => {
-        if (triedConnecting) {
+        
+        const tag = createTag(
+            `Sabu listening at http://${host}:${port}`,
+            `Files served from ${source}`
+        )
+        
+        if (triedConnecting && !program.quiet) {
             // Clear previous output since the port likely changed
-            process.stdout.moveCursor(0)
-            process.stdout.clearLine()
-            process.stdout.moveCursor(0, -2)
-            process.stdout.clearLine()
+            clearLines(tag.split('\n').length - 1)
         }
+        
         triedConnecting = true
-        process.stdout.write(`Sabu listening at http://${host}:${port}\n`)
-        process.stdout.write(`Files served from ${source}\n`)
+        
+        if (!program.quiet) process.stdout.write(tag)
+        
     })
 }
 
@@ -64,8 +89,6 @@ const start = opts => {
             connect(host, port, (sourceRel || source))
         }
     })
-    
-    app.on('connected', () => { console.log('connect') })
     
     connect(host, port, (sourceRel || source))
     
@@ -103,5 +126,7 @@ else {
     if (program.port) opts.port = program.port
     
 }
+
+const app = require('./app')(opts)
 
 start(opts)
