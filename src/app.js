@@ -56,11 +56,22 @@ const isBinary = (filePath, data) => new Promise((resolve, reject) => {
 })
 
 const sendFile = (res, filePath) => {
-    res.header('Content-Type', mime.lookup(filePath))
-    fs.createReadStream(filePath).pipe(res)
-    res.once('result', err => {
-        if (err) return res.send(500, { error: err })
+    
+    fs.stat(filePath, (err, stats) => {
+        
+        if (err) {
+            console.error(err)
+            return res.send(404, { error: 'File not found' })
+        }
+        
+        res.header('Content-Type', mime.lookup(filePath))
+        fs.createReadStream(filePath).pipe(res)
+        res.once('result', err => {
+            if (err) return res.send(500, { error: err })
+        })
+        
     })
+    
 }
 
 
