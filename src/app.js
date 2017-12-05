@@ -78,9 +78,9 @@ const sendFile = (res, filePath) => {
 // @todo Cleanup this massive function
 module.exports = opts => {
     
-    const corsConfig = !opts.corsConfig
+    const corsConfig = !opts.cors
         ? defaultCorsConfig
-        : Object.assign(defaultCorsConfig, opts.corsConfig)
+        : Object.assign(defaultCorsConfig, opts.cors)
     
     const cors = corsMiddleware(corsConfig)
     
