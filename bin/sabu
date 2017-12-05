@@ -28,7 +28,7 @@ program
 program.parse(process.argv)
 
 const createTag = (a, b) => {
-    let tag = fs.readFileSync(path.resolve(__dirname, 'sabu.tag'), 'utf8')
+    let tag = fs.readFileSync(path.resolve(__dirname, '../src/sabu.tag'), 'utf8')
     tag = tag.replace('%1', a)
     tag = tag.replace('%2', b)
     return tag
@@ -129,6 +129,6 @@ else {
     
 }
 
-const app = require(path.resolve('../src/app')(opts)
+const app = require('../src/app')(opts)
 
 start(opts)
