@@ -4,11 +4,19 @@
   "description": "Static file server in Node.js",
   "main": "src/index.js",
   "scripts": {
+    "start": "node ./src/index.js",
+    "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wesleybliss/sabu.git"
+  },
+  "files": [
+    "src"
+  ],
+  "bin": {
+    "sabu": "./bin/sabu"
   },
   "keywords": [
     "node",
