@@ -6,11 +6,13 @@ const restify = require('restify')
 const corsMiddleware = require('restify-cors-middleware')
 const basicAuth = require('./basic-auth')
 const mime = require('mime-types')
+const he = require('he')
 const {
     getCleanUrl,
     getCleanPath,
     isBinary,
-    sendFile
+    sendFile,
+    directoryListing
 } = require('./utils')
 
 const app = restify.createServer({
@@ -83,8 +85,8 @@ module.exports = opts => {
         const source = opts.source
         const index = opts.index || path.join(opts.source, 'index.html')
         
-        let url         = getCleanUrl(req.url)
-        let filePath    = getCleanPath(url, req.url)
+        let uri         = getCleanUrl(req.url)
+        let filePath    = getCleanPath(uri, req.url)
         let filePathAbs = path.resolve(source, filePath)
         let fileExists  = fs.existsSync(filePathAbs) && fs.lstatSync(filePathAbs).isFile()
         let sentFile    = ''
@@ -99,7 +101,35 @@ module.exports = opts => {
             sentFile = index
         }
         
-        sendFile(res, sentFile)
+        if (fs.existsSync(sentFile)) {
+            
+            // Send file
+            sendFile(res, sentFile)
+            
+        }
+        else {
+            
+            // Send directory index
+            sentFile = path.resolve(__dirname, 'index.html')
+            
+            if (uri.trim().length < 1)
+                uri = '/'
+            
+            let template = fs.readFileSync(sentFile, 'utf8')
+            const dirlist = directoryListing(sentFile)
+            
+            template = template.replace('%title%', `Index of ${he.encode(uri)}`)
+            template = template.replace('%header%', `Index of ${he.encode(uri)}`)
+            template = template.replace('%data%', dirlist)
+            
+            res.writeHead(200, {
+                'Content-Length': Buffer.byteLength(template),
+                'Content-Type': 'text/html'
+            })
+            res.write(template)
+            res.end()
+            
+        }
         
         console.info('⇆', path.basename(sentFile), mime.lookup(sentFile))
         

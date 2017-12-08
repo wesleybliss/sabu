@@ -1,7 +1,10 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 const isBinaryFile = require('isbinaryfile')
+const sizeToString = require('./size-to-string')
+const permsToString = require('./perms-to-string')
 
 const getCleanUrl = url => {
     // Remove trailing slash
@@ -53,7 +56,31 @@ const sendFile = (res, filePath) => {
     
 }
 
+const directoryListing = dir => {
+    
+    dir = path.dirname(dir)
+    
+    return fs.readdirSync(dir, 'utf8')
+        .map(x => {
+            
+            const stat = fs.statSync(path.resolve(dir, x))
+            const size = sizeToString(stat, true, false)
+            const perms = permsToString(stat)
+            
+            return `
+                 <tr>
+                    <td>@todo icon</td>
+                    <td>${perms}</td>
+                    <td>${size}</td>
+                    <td>${x}</td>
+                `
+        })
+        .join('\n')
+    
+}
+
 module.exports.getCleanUrl = getCleanUrl
 module.exports.getCleanPath = getCleanPath
 module.exports.isBinary = isBinary
 module.exports.sendFile = sendFile
+module.exports.directoryListing = directoryListing

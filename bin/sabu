@@ -8,6 +8,7 @@ const program = require('commander')
 
 process.title = 'sabu'
 
+let source = ''
 const defaultOpts = {
     source:     process.cwd(),
     sourceRel:  process.cwd(),
@@ -24,7 +25,9 @@ program
     .option('-q, --quiet', 'Quiet startup (no console output)')
     .option('-a, --auth <s>', 'Basic auth (user:pass)')
     .option('-c, --config <s>', 'JSON config file with options')
-    .action(target => { source = target })
+    .action(target => {
+        source = target
+    })
 
 program.parse(process.argv)
 
@@ -97,7 +100,6 @@ const parseAuth = auth => {
 const start = opts => {
     
     let {
-        source,
         sourceRel,
         host,
         port
