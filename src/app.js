@@ -6,6 +6,12 @@ const restify = require('restify')
 const corsMiddleware = require('restify-cors-middleware')
 const basicAuth = require('./basic-auth')
 const mime = require('mime-types')
+const {
+    getCleanUrl,
+    getCleanPath,
+    isBinary,
+    sendFile
+} = require('./utils')
 
 const app = restify.createServer({
     name:    'Sabu',
@@ -24,57 +30,6 @@ const defaultCorsConfig = {
     exposeHeaders: ['API-Token-Expiry']
 }
 
-const getCleanUrl = url => {
-    // Remove trailing slash
-    return (url.split('').pop() !== '/') ? url
-        : url.substring(0, url.length - 1)
-}
-
-const getCleanPath = url => {
-    
-    let filePath = url
-    
-    // Remove trailing slash(es)
-    while (filePath.substring(0, 1) === '/')
-        filePath = filePath.substring(1)
-    
-    return filePath
-    
-}
-
-const isBinary = (filePath, data) => new Promise((resolve, reject) => {
-    
-    fs.lstat(filePath, (err, stat) => {
-        
-        if (err) return reject(err)
-        
-        isBinaryFile(data, stat.size, (err, result) =>
-            err ? reject(err) : resolve(!result))
-        
-    })
-    
-})
-
-const sendFile = (res, filePath) => {
-    
-    fs.stat(filePath, (err, stats) => {
-        
-        if (err) {
-            console.error(err)
-            return res.send(404, { error: 'File not found' })
-        }
-        
-        res.header('Content-Type', mime.lookup(filePath))
-        fs.createReadStream(filePath).pipe(res)
-        res.once('result', err => {
-            if (err) return res.send(500, { error: err })
-        })
-        
-    })
-    
-}
-
-
 // @todo Cleanup this massive function
 module.exports = opts => {
     
@@ -92,6 +47,9 @@ module.exports = opts => {
     app.use(restify.plugins.authorizationParser())
     app.pre(cors.preflight)
     app.use(cors.actual)
+    
+    app.pre(restify.plugins.pre.dedupeSlashes())
+    app.pre(restify.plugins.pre.userAgentConnection())
     
     if (opts.basicAuth) {
         const user = opts.basicAuth.user || 'user'
