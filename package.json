@@ -1,6 +1,6 @@
 {
   "name": "sabu",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Static file server in Node.js",
   "main": "bin/sabu",
   "scripts": {
