@@ -2,12 +2,38 @@
 <html>
 <head>
 <title>%title%</title>
+<link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
 <style>
 
 * {
-    color: black;
-    background-color: white;
     font-family: sans-serif;
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+table {
+    border-spacing: 1px;
+    border-collapse: separate;
+}
+
+table, tr, td {
+    font-family: monospace;
+    border: none;
+}
+
+tr, td {
+    margin: 0;
+}
+
+td {
+    padding: 4px 10px;
+    background-color: #eee;
+}
+
+tr:nth-child(even) td {
+    background-color: #fff;
 }
 
 </style>
@@ -15,6 +41,8 @@
 <body>
 
 <h1>%header%</h1>
+<small>%abspath%</small>
+
 
 <table>
     %data%

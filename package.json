@@ -31,6 +31,8 @@
   "homepage": "https://github.com/wesleybliss/sabu#readme",
   "dependencies": {
     "commander": "^2.12.2",
+    "font-awesome": "^4.7.0",
+    "font-awesome-filetypes": "^1.2.0",
     "he": "^1.1.1",
     "isbinaryfile": "^3.0.2",
     "mime-types": "^2.1.17",

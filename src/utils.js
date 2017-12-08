@@ -2,9 +2,11 @@
 
 const fs = require('fs')
 const path = require('path')
+const mime = require('mime-types')
 const isBinaryFile = require('isbinaryfile')
 const sizeToString = require('./size-to-string')
 const permsToString = require('./perms-to-string')
+const { getIconForExtension } = require('font-awesome-filetypes')
 
 const getCleanUrl = url => {
     // Remove trailing slash
@@ -58,24 +60,36 @@ const sendFile = (res, filePath) => {
 
 const directoryListing = dir => {
     
-    dir = path.dirname(dir)
-    
-    return fs.readdirSync(dir, 'utf8')
-        .map(x => {
-            
-            const stat = fs.statSync(path.resolve(dir, x))
-            const size = sizeToString(stat, true, false)
-            const perms = permsToString(stat)
-            
-            return `
-                 <tr>
-                    <td>@todo icon</td>
-                    <td>${perms}</td>
-                    <td>${size}</td>
-                    <td>${x}</td>
-                `
-        })
-        .join('\n')
+    try {
+        
+        return fs.readdirSync(dir, 'utf8')
+            .map(x => {
+                
+                let ext = path.extname(x)
+                if (ext && ext.startsWith('.'))
+                    ext = ext.substring(1)
+                
+                const stat = fs.statSync(path.resolve(dir, x))
+                const icon = getIconForExtension(ext)
+                const size = sizeToString(stat, true, false)
+                const perms = permsToString(stat)
+                
+                return `
+                     <tr>
+                        <td>${icon}</td>
+                        <td>${perms}</td>
+                        <td>${size}</td>
+                        <td><a href="${x}">${x}</a></td>
+                    `
+            })
+            .join('\n')
+        
+    }
+    catch (e) {
+        
+        return ''
+        
+    }
     
 }
 

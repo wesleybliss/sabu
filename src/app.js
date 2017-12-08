@@ -115,10 +115,23 @@ module.exports = opts => {
             if (uri.trim().length < 1)
                 uri = '/'
             
+            let uplink = ''
             let template = fs.readFileSync(sentFile, 'utf8')
-            const dirlist = directoryListing(sentFile)
+            let dirlist = directoryListing(filePathAbs)
             
+            try {
+                let uriparts = uri.split('/').filter(x => x && x.trim())
+                console.log(uriparts)
+                uplink = (uriparts.length <= 1)
+                    ? '/'
+                    : uriparts.slice(0, uriparts.length - 1)
+                uplink = `<p><a href="${uplink}">..</a></p>`
+            }
+            catch (e) {}
+            
+            dirlist = uplink + dirlist
             template = template.replace('%title%', `Index of ${he.encode(uri)}`)
+            template = template.replace('%abspath%', filePathAbs)
             template = template.replace('%header%', `Index of ${he.encode(uri)}`)
             template = template.replace('%data%', dirlist)
             
