@@ -102,6 +102,11 @@ Sabu can also accept a JSON config file. Any filename is acceptable.
             "Access-Control-Allow-Headers"
         ],
         "exposeHeaders": ["API-Token-Expiry"]
+    },
+    "routes": {
+        "/": "index.html",
+        "/foo": "foo.json",
+        "/bar": "bar.json"
     }
 }
 ```

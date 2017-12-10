@@ -80,7 +80,37 @@ module.exports = opts => {
     //     charSet: 'utf-8'
     // }))
     
+    if (opts.routes) {
+        
+        Object.keys(opts.routes).forEach(mount => {
+            
+            // console.info('Adding custom route', mount, opts.routes[mount])
+            
+            app.get(mount, (req, res) => {
+                
+                const file = opts.routes[mount]
+                
+                if (!fs.existsSync(file)) {
+                    console.error('Custom route "' + mount + '" - file not found')
+                    return res.send(404)
+                }
+                
+                sendFile(res, file)
+                
+            })
+            
+        })
+        
+    }
+    
     app.get(/\/.*/, (req, res) => {
+        
+        if (opts.routes) {
+            const match = Object.keys(opts.routes)
+                .filter(x => x == req.url)
+            if (match && match.length > 0)
+                console.info('*** custom route', match)
+        }
         
         const source = opts.source
         const index = opts.index || path.join(opts.source, 'index.html')
