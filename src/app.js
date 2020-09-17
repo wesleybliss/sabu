@@ -65,6 +65,7 @@ module.exports = opts => {
     })
     
     app.use((req, res, next) => {
+        req.url = req.url.replace(/(\.\.\/?)/g, '');
         console.info(req.method, req.url)
         next()
     })
